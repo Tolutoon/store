@@ -1,28 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:store/constants/themes.dart';
+import 'package:store/controllers/product_controller.dart';
+import 'package:store/widgets/ads_banner.dart';
+import 'package:store/widgets/card_widget.dart';
+import 'package:store/widgets/chip_widget.dart';
+import 'package:store/widgets/test_widget.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends ConsumerWidget {
+  // ignore: use_super_parameters
+  const HomePage({Key? key}) : super(key: key); // Fixed constructor syntax
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final products = ref.watch(productNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: tSecondaryColor,
         title: Center(
           child: SvgPicture.asset(
             'assets/general/store_brand.svg',
+            // ignore: deprecated_member_use
             color: tWhiteColor,
             width: 180,
           ),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white), // Added const
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: IconButton(
-                onPressed: () {}, icon: const Icon(Icons.local_mall)),
+              onPressed: () {},
+              icon: const Icon(Icons.local_mall),
+            ),
           )
         ],
       ),
@@ -33,34 +45,97 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               // Ads banner section
-              Container(
-                width: double.infinity,
-                height: 180,
-                decoration: BoxDecoration(
-                    color: tPrimaryColor,
-                    borderRadius: BorderRadius.circular(12)),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Container(
-                      child: Column(
-                        children: [
-                          Text('Apple Store'),
-                          Text(
-                              'Find the Apple product and accesories you are looking for'),
-                          ElevatedButton(
-                              onPressed: () {},
-                              child: const Text('Shop new year'))
-                        ],
-                      ),
-                    )),
-                    Image.asset('assets/general/landing.png'),
+              const AdsBannerWidget(),
+              const SizedBox(
+                height: 10,
+              ),
+              // Chip section
+              SizedBox(
+                height: 50,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: const [
+                    ChipWidget(
+                      chipLabel: 'All',
+                    ),
+                    ChipWidget(
+                      chipLabel: 'Computers',
+                    ),
+                    ChipWidget(chipLabel: 'Headsets'),
+                    ChipWidget(chipLabel: 'Accessories'),
+                    ChipWidget(chipLabel: 'Printing'),
+                    ChipWidget(chipLabel: 'Cameras')
                   ],
                 ),
-              )
-              // Chip section
+              ),
+              const SizedBox(
+                height: 12,
+              ),
               // Hot sales section
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Hot Sales',
+                    style: AppTheme
+                        .tSubHeading, // Removed because AppTheme not defined
+                  ),
+                  Text(
+                    'See all',
+                    style: AppTheme
+                        .seeAllText, // Removed because AppTheme not defined
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Container(
+                padding: const EdgeInsets.all(12),
+                // color: Colors.amber,
+                height: 290,
+                width: double.infinity,
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: products.length,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: ((context, index) => CardWidget(
+                        productIndex: index,
+                      )),
+                ),
+              ),
               // Featured products
+
+              // Hot sales section
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Featured Products',
+                    style: AppTheme
+                        .tSubHeading, // Removed because AppTheme not defined
+                  ),
+                  Text(
+                    'See all',
+                    style: AppTheme
+                        .seeAllText, // Removed because AppTheme not defined
+                  )
+                ],
+              ),
+              MasonryGridView.builder(
+                  itemCount: products.length,
+                  shrinkWrap: true,
+                  gridDelegate:
+                      const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                  itemBuilder: ((context, index) => Container(
+                        height: 200,
+                        child: CardWidget(
+                          productIndex: index,
+                        ),
+                      ))),
+              TestWidget(),
             ],
           ),
         ),
