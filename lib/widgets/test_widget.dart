@@ -14,7 +14,7 @@ class TestWidget extends ConsumerWidget {
       data: (productData) {
         List<ProductsModel> productList = productData.map((e) => e).toList();
         return Container(
-          height: 100,
+          height: 300,
           child: ListView.builder(
             itemCount: productList.length,
             itemBuilder: (_, index) {
@@ -22,7 +22,8 @@ class TestWidget extends ConsumerWidget {
                 child: Column(
                   children: [
                     Text(productList[index].title.toString()),
-                    Text(productList[index].description.toString())
+                    Text(productList[index].description.toString()),
+                    Image.network(productList[index].image.toString()),
                   ],
                 ), // Removed unnecessary $ sign
               );
