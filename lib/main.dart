@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:store/views/home_page.dart';
 
 void main() {
-  runApp( ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: MyApp()));
 } 
 
 class MyApp extends StatelessWidget {

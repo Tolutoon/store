@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:store/constants/themes.dart';
 import 'package:store/controllers/product_controller.dart';
-import 'package:store/provider/data_provider.dart';
+// import 'package:store/provider/data_provider.dart';
 
 class CardWidget extends ConsumerWidget {
   const CardWidget({
@@ -53,14 +53,23 @@ class CardWidget extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        '\$558',
+                      Text(
+                        '\$${product[productIndex].price}',
                         style: AppTheme.kCardTitle,
                       ),
                       IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.add_circle,
+                          onPressed: () {
+                            ref
+                                .read(productNotifierProvider.notifier)
+                                .isSelectItem(
+                                    product[productIndex].pid, productIndex);
+
+                            print(product[productIndex].isSelected);
+                          },
+                          icon: Icon(
+                            product[productIndex].isSelected
+                                ? Icons.check_circle
+                                : Icons.add_circle,
                             size: 30,
                           ))
                     ],

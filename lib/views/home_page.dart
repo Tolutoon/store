@@ -140,6 +140,27 @@ class HomePage extends ConsumerWidget {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+          unselectedItemColor: tSecondaryColor,
+          selectedItemColor: tPrimaryColor,
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                label: 'Home',
+                activeIcon: Icon(Icons.home_filled)),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_outline),
+                label: 'Home',
+                activeIcon: Icon(Icons.favorite)),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.location_on_outlined),
+                label: 'Home',
+                activeIcon: Icon(Icons.location_on)),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.notifications_outlined),
+                label: 'Home',
+                activeIcon: Icon(Icons.notifications)),
+          ]),
     );
   }
 }

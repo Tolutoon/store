@@ -9,23 +9,34 @@ class TestWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final products = ref.watch(productDataProvider);
+    print(products.hasValue);
 
     return products.when(
       data: (productData) {
         List<ProductsModel> productList = productData.map((e) => e).toList();
         return Container(
           height: 300,
-          child: ListView.builder(
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // Number of columns in the grid
+              crossAxisSpacing: 10, // Spacing between columns
+              mainAxisSpacing: 10, // Spacing between rows
+              childAspectRatio:
+                  0.75, // Aspect ratio of grid items (width / height)
+            ),
             itemCount: productList.length,
             itemBuilder: (_, index) {
               return Card(
-                child: Column(
-                  children: [
-                    Text(productList[index].title.toString()),
-                    Text(productList[index].description.toString()),
-                    Image.network(productList[index].image.toString()),
-                  ],
-                ), // Removed unnecessary $ sign
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(productList[index].title.toString()),
+                      Text(productList[index].description.toString()),
+                      Image.network(productList[index].image.toString()),
+                      Text(productList[index].price.toString()),
+                    ],
+                  ),
+                ),
               );
             },
           ),
