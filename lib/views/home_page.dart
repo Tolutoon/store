@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:store/constants/themes.dart';
+import 'package:store/controllers/item_controller.dart';
 import 'package:store/controllers/product_controller.dart';
+import 'package:store/views/cart_page.dart';
 import 'package:store/widgets/ads_banner.dart';
 import 'package:store/widgets/card_widget.dart';
 import 'package:store/widgets/chip_widget.dart';
@@ -16,6 +18,8 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final products = ref.watch(productNotifierProvider);
+    final itemBag = ref.watch(itemBagProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: tSecondaryColor,
@@ -31,9 +35,17 @@ class HomePage extends ConsumerWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.local_mall),
+            child: Badge(
+              label: Text(itemBag.length.toString()),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CartPage()));
+                },
+                icon: const Icon(Icons.local_mall),
+              ),
             ),
           )
         ],

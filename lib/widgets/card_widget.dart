@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:store/constants/themes.dart';
+import 'package:store/controllers/item_controller.dart';
 import 'package:store/controllers/product_controller.dart';
+import 'package:store/model/product_model.dart';
 // import 'package:store/provider/data_provider.dart';
 
 class CardWidget extends ConsumerWidget {
@@ -15,6 +17,7 @@ class CardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final product = ref.watch(productNotifierProvider);
+    final itemBag = ref.watch(itemBagProvider);
     // ref.watch(productDataProvider);
     return Container(
       decoration: BoxDecoration(color: tWhiteColor, boxShadow: [
@@ -58,13 +61,33 @@ class CardWidget extends ConsumerWidget {
                         style: AppTheme.kCardTitle,
                       ),
                       IconButton(
-                          onPressed: () {
+                          onPressed: () { 
                             ref
                                 .read(productNotifierProvider.notifier)
                                 .isSelectItem(
                                     product[productIndex].pid, productIndex);
 
                             print(product[productIndex].isSelected);
+                            print(itemBag.length);
+
+                            if (product[productIndex].isSelected == false) {
+                              ref.read(itemBagProvider.notifier).addNewItemBag(
+                                  ProductModel(
+                                      pid: product[productIndex].pid,
+                                      imgUrl: product[productIndex].imgUrl,
+                                      title: product[productIndex].title,
+                                      price: product[productIndex].price,
+                                      shortDescription: product[productIndex]
+                                          .shortDescription,
+                                      longDescription:
+                                          product[productIndex].longDescription,
+                                      reviews: product[productIndex].reviews,
+                                      rating: product[productIndex].rating));
+                            } else {
+                              ref
+                                  .read(itemBagProvider.notifier)
+                                  .removeItem(product[productIndex].pid);
+                            }
                           },
                           icon: Icon(
                             product[productIndex].isSelected
